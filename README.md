@@ -7,6 +7,8 @@ There are 2 servers, the ['server_default'](default/server_default.py) and the [
 * Run the route ['/nodes/register']() of default first, then do the same for the 2nd server.
 * Run ['/mine']() to add new blocks
 * Run ['/nodes']() to view all distributed urls
+* Run ['/nodes/resolve']() to sync up chain
+* Run ['/transaction/new']() to add new transaction (POST request)
 
 Reason for 2 servers: a blockchain is copied to every computer that runs it, every server contains the nodes (urls) of every other server so it can broadcast changes and sync up. 
 

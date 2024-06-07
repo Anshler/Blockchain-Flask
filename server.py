@@ -42,7 +42,7 @@ def mine():
         return jsonify(response), 200
 
     response = {
-        'message': "Block already mined"
+        'message': "Chain has been synced up, try mining again"
     }
     return jsonify(response), 400
 

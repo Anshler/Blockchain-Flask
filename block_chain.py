@@ -10,7 +10,7 @@ import threading
 import default.block_chain_default
 
 
-# The 'actual' blockchain, it acquires all the nodes (urls) from one of the 'original' chain
+# The 'actual' blockchain, it acquires all the nodes (urls) from one of the 'default' chain
 class BlockChain(default.block_chain_default.BlockChain):
     def __init__(self):
         self.__chain: List[Dict] = []

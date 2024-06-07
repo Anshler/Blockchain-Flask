@@ -8,7 +8,7 @@ There are 2 servers, the ['server_default'](default/server_default.py) and the [
 * Run ['/nodes']() to view all distributed urls
 * Run ['/nodes/resolve']() to sync up chain
 * Run ['/mine']() to add new blocks and save transactions to blockchain
-* Run ['/transaction/new']() to add new transaction (POST request)
+* Run ['/transactions/new']() to add new transaction (POST request)
 
 Reason for 2 servers: simulate real world situation, a blockchain is copied to every computer that runs it, every server contains the nodes (urls) of every other server so it can broadcast changes and sync up. 
 

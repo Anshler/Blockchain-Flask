@@ -85,14 +85,14 @@ class BlockChain:
         """
         with self.__block_lock:
             # Check if the chain is replaced (False), if not (True) then return None
-            if not self.resolve_conflicts():
-                block = Block(
-                    len(self.__chain) + 1,
-                    self.__current_transactions,
-                    proof,
-                    previous_hash).get()
+            block = Block(
+                len(self.__chain) + 1,
+                self.__current_transactions,
+                proof,
+                previous_hash).get()
 
-                self.__chain.append(block)
+            self.__chain.append(block)
+            if not self.resolve_conflicts():
                 self.__current_transactions = []
                 return block
             return None

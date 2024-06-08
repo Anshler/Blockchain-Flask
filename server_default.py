@@ -1,12 +1,12 @@
 from uuid import uuid4
 from flask import Flask, jsonify, request
-from block_chain_default import BlockChain
+from block_chain import BlockChain
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 our_node_id = str(uuid4()).replace('-', '')
 
-blockchain = BlockChain()
+blockchain = BlockChain('seed')
 
 
 @app.route('/mine', methods=['GET'])

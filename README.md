@@ -2,7 +2,7 @@
 
 A simple project about Blockchain using Flask server
 
-There are 2 servers, the ['server_default'](default/server_default.py) and the ['server'](server.py)
+There are 2 servers, the ['server_default'](server_default.py) and the ['server'](server.py)
 
 * Run the route ['/nodes/register']() of default first, then do the same for the 2nd server.
 * Run ['/nodes']() to view all distributed urls

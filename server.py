@@ -8,7 +8,6 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 our_node_id = str(uuid4()).replace('-', '')
 
 blockchain = BlockChain()
-server_info = yaml.safe_load(open('server_info.yaml', 'r'))
 
 
 @app.route('/mine', methods=['GET'])
@@ -124,4 +123,4 @@ def consensus():
 
 
 if __name__ == '__main__':
-    app.run(server_info['HOST'], server_info['PORT'])
+    app.run(port=8080)

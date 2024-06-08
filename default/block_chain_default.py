@@ -63,11 +63,12 @@ class BlockChain:
             len(self.__chain) + 1,
             self.__current_transactions,
             100,
-            1).get()
+            "1").get()
 
         self.__current_transactions = []
         self.__chain.append(block)
         return block
+
     def new_block(self, proof, previous_hash) -> Dict | None:
         """
         Add a new block to the chain
@@ -87,7 +88,9 @@ class BlockChain:
             return None
 
     def new_transaction(self, sender, recipient, amount) -> int:
-        self.__current_transactions.append(Transaction(sender, recipient, amount).get())
+        self.__current_transactions.append(
+            Transaction(sender, recipient, amount).get())
+
         return self.last_block['index'] + 1
 
     def proof_of_work(self, last_proof) -> int:
@@ -96,11 +99,9 @@ class BlockChain:
           - Find a number p' such that hash(pp') contains leading 4 zeroes, where p is the previous p'
           - p is the previous proof, and p' is the new proof
         :param last_proof: <int>
-        :return: <int>
         """
 
         potential_new_proof = 0
-
         while self.valid_proof(last_proof, potential_new_proof) is False:
             potential_new_proof += 1
 
@@ -123,11 +124,14 @@ class BlockChain:
     def register_node(self, address) -> bool:
         """
         Add a new node with an address
+        :param address: <str> current url
         """
         with self.__block_lock:
             parsed_url = urlparse(address).netloc
             if parsed_url in self.__nodes:
                 return False
+
+            # Broadcast new node to every server
             for node in self.__nodes:
                 requests.post(f'http://{node}/nodes/register', json={'node': parsed_url})
             self.__nodes.add(parsed_url)
@@ -135,7 +139,8 @@ class BlockChain:
 
     def broadcast_register_node(self, parsed_url):
         """
-        Add a new node with an address
+        Add a new node with an address (from broadcast POST request)
+        :param parsed_url: <str> url of new registered server
         """
         with self.__block_lock:
             self.__nodes.add(parsed_url)
@@ -175,13 +180,15 @@ class BlockChain:
         """
         nodes_on_network = self.__nodes
         new_chain = None
+        new_nodes = None
 
         # Keep track of the longest chain we find
         max_length = len(self.__chain)
         # Fetch all chains from all nodes
         for node in nodes_on_network:
             response = requests.get(f'http://{node}/chain')
-            if response.status_code == 200:
+            response_node = requests.get(f'http://{node}/nodes')
+            if response.status_code == 200 and response_node.status_code == 200:
                 response_json = response.json()
                 neighbor_node_length = response_json['length']
                 neighbor_node_chain = response_json['chain']
@@ -189,9 +196,11 @@ class BlockChain:
                 if neighbor_node_length > max_length and self.valid_chain(neighbor_node_chain):
                     max_length = neighbor_node_length
                     new_chain = neighbor_node_chain
+                    new_nodes = response_node.json()['nodes']
 
         if new_chain:
             self.__chain = new_chain
+            self.__nodes = new_nodes
             return True
 
         return False
@@ -199,7 +208,7 @@ class BlockChain:
     @staticmethod
     def hash(block: Dict) -> str:
         """
-            Calculates the SHA-256 hash of the block data.
+        Calculates the SHA-256 hash of the block data.
         """
         hash_string = hashlib.sha256(json.dumps(block, sort_keys=True).encode()).hexdigest()
         return hash_string

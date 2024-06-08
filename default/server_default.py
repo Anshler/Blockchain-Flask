@@ -9,6 +9,7 @@ our_node_id = str(uuid4()).replace('-', '')
 
 blockchain = BlockChain()
 
+
 @app.route('/mine', methods=['GET'])
 def mine():
     # Get next proof
@@ -91,12 +92,13 @@ def register_nodes():
 
     return jsonify(response), 200
 
+
 @app.route('/nodes/register', methods=['POST'])
 def broadcast_register_nodes():
     node = request.get_json()['node']
     blockchain.broadcast_register_node(node)
 
-    response = {'message': 'Nodes broadcasted',
+    response = {'message': 'Nodes broadcast',
                 'total_nodes': list(blockchain.nodes)}
 
     return jsonify(response), 200

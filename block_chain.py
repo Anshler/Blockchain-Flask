@@ -13,14 +13,10 @@ import default.block_chain_default
 # The 'actual' blockchain, it acquires all the nodes (urls) from one of the 'default' chain
 class BlockChain(default.block_chain_default.BlockChain):
     def __init__(self):
-        self.__chain: List[Dict] = []
-        self.__current_transactions: List[Dict] = []
-        self.__block_lock = threading.Lock()
-        self.__first_block()  # Genesis block
+        super().__init__()
         self.__seed_node = random.choice(  # Initialize known networks
             yaml.safe_load(
                 open('known_nodes.yaml', 'r'))['nodes'])
-        self.__nodes = set()
 
     def register_node(self, address) -> bool:
         """
@@ -32,7 +28,7 @@ class BlockChain(default.block_chain_default.BlockChain):
             print(f'http://{self.__seed_node}/nodes')
             request_node = requests.get(f'http://{self.__seed_node}/nodes')
             request_chain = requests.get(f'http://{self.__seed_node}/chain')
-            if request_node.status_code == 200:
+            if request_node.status_code == 200 and request_chain.status_code == 200:
                 self.__nodes = set(request_node.json()['nodes'])
                 self.__chain = request_chain.json()['chain']
             else:
@@ -42,6 +38,8 @@ class BlockChain(default.block_chain_default.BlockChain):
             parsed_url = urlparse(address).netloc
             if parsed_url in self.__nodes:
                 return False
+
+            # Broadcast new node to every server
             for node in self.__nodes:
                 requests.post(f'http://{node}/nodes/register', json={'node': parsed_url})
             self.__nodes.add(parsed_url)

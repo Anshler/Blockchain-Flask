@@ -3,14 +3,10 @@
 block_chain.py,f\1\f18291ac07cbeaacd1ba48f3a4588d49fb138a37
 9
 	server.py,3\7\37f78d9e69dff05b443a39c32175987bb0cbdccd
-;
-server_2.py,4\d\4de89f0f915d553bf6de5299d9b0342adb8829ca
 @
 server_info.yaml,7\4\746698baf2b69686f2957c83734d0747eadb352a
 @
 known_nodes.yaml,9\8\9809023a1e6cc8b71b7b0b4114d9a65ae620b004
-F
-block_chain_default.py,1\7\174a0a73d76e2f14bfa607f3a11abcfd87ba1fc8
 I
 default/server_default.py,6\4\64ac97d2bc6f60213073b3d8f041034ad35b7e53
 N

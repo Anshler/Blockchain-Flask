@@ -84,16 +84,15 @@ class BlockChain:
         Add a new block to the chain
         """
         with self.__block_lock:
-            block = Block(
-                len(self.__chain) + 1,
-                self.__current_transactions,
-                proof,
-                previous_hash).get()
-
-            self.__chain.append(block)
-
             # Check if the current chain is authoritative (i.e. not replaced/ False)
             if not self.resolve_conflicts():
+                block = Block(
+                    len(self.__chain) + 1,
+                    self.__current_transactions,
+                    proof,
+                    previous_hash).get()
+
+                self.__chain.append(block)
                 self.__current_transactions = []
                 return block
             return None

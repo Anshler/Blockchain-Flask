@@ -1,6 +1,5 @@
-from uuid import uuid4
-
 import yaml
+from uuid import uuid4
 from flask import Flask, jsonify, request
 from block_chain import BlockChain
 

@@ -1,13 +1,8 @@
 import random
 import yaml
-
-import hashlib
-import json
-from typing import List, Dict, Set, Any
-from urllib.parse import urlparse
 import requests
-import threading
 import default.block_chain_default
+from urllib.parse import urlparse
 
 
 # The 'actual' blockchain, it acquires all the nodes (urls) from one of the 'default' chain

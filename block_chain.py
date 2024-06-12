@@ -79,13 +79,20 @@ class BlockChain:
         self.__chain.append(block)
         return block
 
-    def new_block(self, proof, previous_hash) -> Dict | None:
+    def new_block(self, proof, previous_hash, our_node_id) -> Dict | None:
         """
         Add a new block to the chain
         """
         with self.__block_lock:
             # Check if the current chain is authoritative (i.e. not replaced/ False)
             if not self.resolve_conflicts():
+                # Received reward for finding the proof
+                # Sender = 0 to signify this node has MINED a new coin
+                self.new_transaction(
+                    sender="0",
+                    recipient=our_node_id,
+                    amount=1
+                )
                 block = Block(
                     len(self.__chain) + 1,
                     self.__current_transactions,

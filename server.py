@@ -16,18 +16,10 @@ def mine():
     last_proof = last_block['proof']
     new_proof = blockchain.proof_of_work(last_proof)
 
-    # Received reward for finding the proof
-    # Sender = 0 to signify this node has MINED a new coin
-    blockchain.new_transaction(
-        sender="0",
-        recipient=our_node_id,
-        amount=1
-    )
-
     # Now that we've found the proof and received our reward...
     # Add the new block to the chain
     previous_hash = blockchain.hash(last_block)
-    new_block = blockchain.new_block(new_proof, previous_hash)
+    new_block = blockchain.new_block(new_proof, previous_hash, our_node_id)
     if new_block is not None:
         response = {
             'message': "New block added",

@@ -68,6 +68,10 @@ class BlockChain:
     def nodes(self) -> Set:
         return self.__nodes
 
+    @property
+    def current_transaction(self):
+        return self.__current_transactions
+
     def __first_block(self) -> Dict:
         block = Block(
             len(self.__chain) + 1,

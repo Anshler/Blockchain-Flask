@@ -1,5 +1,5 @@
 from uuid import uuid4
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect
 from block_chain import BlockChain
 
 app = Flask(__name__)
@@ -9,8 +9,22 @@ our_node_id = str(uuid4()).replace('-', '')
 blockchain = BlockChain()
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return redirect('/chain')
+
+
 @app.route('/mine', methods=['GET'])
 def mine():
+    # Resolve chain
+    replaced = blockchain.resolve_conflicts()
+
+    if replaced:
+        response = {
+            'message': "Chain has been synced up, try mining again"
+        }
+        return jsonify(response), 400
+
     # Get next proof
     last_block = blockchain.last_block
     last_proof = last_block['proof']
@@ -31,7 +45,7 @@ def mine():
         return jsonify(response), 200
 
     response = {
-        'message': "Chain has been synced up, try mining again"
+        'message': "Block already mined, try mining again"
     }
     return jsonify(response), 400
 
@@ -46,9 +60,17 @@ def new_transaction():
 
     sender, recipient, amount = values.values()
 
-    index = blockchain.new_transaction(sender, recipient, amount)
+    _index = blockchain.new_transaction(sender, recipient, amount)
 
-    response = {'message': f'Transaction will be added to block {index}'}
+    response = {'message': f'Transaction will be added to block {_index}'}
+    return jsonify(response), 200
+
+
+@app.route('/transactions', methods=['GET'])
+def transactions():
+
+    transaction_pool = blockchain.current_transaction
+    response = {"transactions_pool": transaction_pool}
     return jsonify(response), 200
 
 
